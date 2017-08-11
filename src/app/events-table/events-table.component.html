@@ -1,0 +1,75 @@
+<div class="row">
+  <h2 class="col-md-3"> Events </h2>
+
+  <div class="col-md-6  form-group">
+    <div class="row">
+      <label class="col-xs-12 control-label"> Filter by Title: </label>
+    </div>
+    <div class="col-xs-12">
+      <div class="row">
+        <input  class="form-control input-sm" [(ngModel)]="filterQuery"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 form-group">
+    <div class="row">
+      <label class="col-xs-12 control-label"> Rows on page </label>
+    </div>
+    <div class="col-xs-12" style="padding-left: 0;">
+      <select class="form-control input-sm" [(ngModel)]="rowsOnPage">
+        <option [ngValue]="2">2</option>
+        <option [ngValue]="5">5</option>
+        <option [ngValue]="10">10</option>
+      </select>
+    </div>
+  </div>
+
+</div>
+
+<div class="panel panel-default" >
+
+
+    <div class="panel-heading"> All Events </div>
+
+    <table class="table table-hover" [mfData]="data | eventsTableFilter : filterQuery" #mf="mfDataTable"
+           [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder" >
+
+      <thead>
+         <tr>
+           <th>  <mfDefaultSorter by="title">Title</mfDefaultSorter></th>
+           <th style="width:25%"><mfDefaultSorter by="startedAt"> Started At </mfDefaultSorter></th>
+           <th style="width:25%"><mfDefaultSorter by="finishedAt"> Finished At </mfDefaultSorter></th>
+           <th style="width:10%"> Products Assigned </th>
+           <th style="width: 145px"> Some Controls </th>
+         </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of mf.data">
+            <td>{{item.title}}</td>
+            <td>{{item.startedAt}}</td>
+            <td>{{item.finishedAt}}</td>
+            <td class="center">{{item.productIds ? item.productIds.length : 0}}</td>
+            <td class="center">
+              <div class="btn-group btn-group-xs">
+                <button type="button" class="btn btn-info" (click)="modify(item.id)">modify</button>
+                <input *ngIf="!item.startedAt" type="button" class="btn btn-info" (click)="startEvent(item)" value="Start"/>
+                <input *ngIf="item.startedAt && !item.finishedAt" type="button" class="btn btn-info" (click)="finishEvent(item)" value="Finish"/>
+                <input *ngIf="item.startedAt && item.finishedAt" type="button" class="btn btn-info" value="Finished" disabled/>
+              </div>
+            </td>
+        </tr>
+        <tr *ngIf="!data">
+          No events found
+        </tr>
+      </tbody>
+
+      <tfoot *ngIf="data">
+      <tr>
+        <td colspan="1" style="vertical-align: center;"> Showing  {{rowsOnPage < data.length ? rowsOnPage : data.length}} of {{data.length}}</td>
+        <td colspan="4" style="text-align: right;"> <mfBootstrapPaginator [rowsOnPageSet]="[15,25,50]"></mfBootstrapPaginator></td>
+      </tr>
+      </tfoot>
+    </table>
+
+</div>

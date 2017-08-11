@@ -1,0 +1,59 @@
+<h3>{{title}}</h3>
+
+<form novalidate (ngSubmit)="onSubmit(productForm)" [formGroup]="productForm">
+  <div class="form-group" [ngClass]="{'has-error': productForm.get('title').hasError('required') && productForm.get('title').touched}">
+    <label for="title">Title<span> *</span></label>
+    <input type="text" class="form-control" id="title" name="title" formControlName="title">
+    <div class="error" *ngIf="productForm.get('title').hasError('required') && productForm.get('title').touched">
+      Title is required
+    </div>
+    <div class="error" *ngIf="productForm.get('title').hasError('maxlength') && productForm.get('title').touched">
+      Length is too mach
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea class="form-control" rows="3" id="description" name="description" formControlName="description"
+    ></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="shortDescription">Short Description</label>
+    <input type="text" class="form-control" id="shortDescription" name="shortDescription" formControlName="shortDescription">
+  </div>
+
+  <div class="form-group" [ngClass]="{'has-error': productForm.get('sku').touched &&
+   ( productForm.get('sku').hasError('required') || productForm.get('sku').hasError('maxlength') || productForm.get('sku').hasError('notUnique') )}">
+    <label for="sku">Sku<span> *</span></label>
+    <input type="text" class="form-control" id="sku" name="sku" formControlName="sku">
+    <div class="error" *ngIf="productForm.get('sku').hasError('required') && productForm.get('sku').touched">
+      Sku is required
+    </div>
+    <div class="error" *ngIf="productForm.get('sku').hasError('maxlength') && productForm.get('sku').touched">
+      Length is too mach
+    </div>
+    <div class="error" *ngIf="productForm.get('sku').hasError('notUnique')">
+      Sku is duplicated
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="price">Price</label>
+    <input type="text" class="form-control" id="price" name="price" formControlName="price">
+  </div>
+
+  <div class="form-group" [hidden]="isCreateMod">
+    <label for="archived">Archived</label>
+    <input type="checkbox" class="checkbox" id="archived" name="archived" formControlName="archived"
+           (change)="changeArchived()" [checked]="productForm.get('archived').value">
+  </div>
+
+  <div class="form-group">
+    <label for="images">Images</label>
+    <input type="text" class="form-control" id="images" name="images" formControlName="images">
+  </div>
+
+  <button type="submit" class="btn btn-success" [disabled]="productForm.invalid || productForm.pristine">Submit</button>
+  <button type="button" class="btn btn-success" (click)="clearForm()" *ngIf="isCreateMod">Clear</button>
+</form>

@@ -1,0 +1,9 @@
+.error {
+  font-size: 14px;
+  line-height: 1;
+  padding: 8px 0;
+  color: #c81b1b;
+}
+.required {
+  color: #c81b1b;
+}

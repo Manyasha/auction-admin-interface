@@ -1,0 +1,27 @@
+<header class="section-header">
+  <h2 class="title">{{title}}</h2>
+</header>
+
+<nav>
+  <ul class="navigation-list">
+    <li class="navigation-item">
+      <a routerLink="/dashboard" routerLinkActive="active" title="Dashboard">
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <li class="navigation-item">
+      <a routerLink="/events" routerLinkActive="active" title="Events">
+        <span>Events</span>
+      </a>
+    </li>
+    <li class="navigation-item">
+      <a routerLink="/products" routerLinkActive="active" title="Products">
+        <span>Products</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<router-outlet></router-outlet>
+
+<toaster-container></toaster-container>

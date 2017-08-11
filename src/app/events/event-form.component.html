@@ -1,0 +1,60 @@
+<h3>{{title}}</h3>
+
+<form novalidate (ngSubmit)="onSubmit(eventForm)" [formGroup]="eventForm">
+  <div class="form-group" [ngClass]="{'has-error': eventForm.get('title').hasError('required') && eventForm.get('title').touched}">
+    <label for="title">Title<span> *</span></label>
+    <input type="text" class="form-control" id="title" name="title" formControlName="title">
+    <div class="error" *ngIf="eventForm.get('title').hasError('required') && eventForm.get('title').touched">
+      Title is required
+    </div>
+    <div class="error" *ngIf="eventForm.get('title').hasError('maxlength') && eventForm.get('title').touched">
+      Length is too mach
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="state">State</label>
+    <input type="text" class="form-control" id="state" name="state" formControlName="state">
+  </div>
+
+  <div class="form-group">
+    <label for="startedAt">Started At</label>
+    <input type="text" class="form-control" id="startedAt" name="startedAt" formControlName="startedAt">
+  </div>
+
+  <div class="form-group">
+    <label for="finishedAt">Finished At</label>
+    <input type="text" class="form-control" id="finishedAt" name="finishedAt" formControlName="finishedAt">
+  </div>
+
+  <div class="form-group">
+    <label for="products">Products</label>
+    <tag-input  id="products" formControlName="products" name="products" #input
+               [secondaryPlaceholder]="'Enter product sku'"
+               [placeholder] = "'Add Product'"
+               (onAdd)="onProductAdded($event)"
+               (onRemove)="onProductRemoved($event)"
+               [onlyFromAutocomplete]="true">
+      <ng-template item-template let-item="item" let-index="index">
+        {{ item.sku }}: {{ item.title }}
+        <delete-icon
+          aria-label="Remove tag"
+          role="button"
+          (click)="input.removeItem(item, index)">
+        </delete-icon>
+      </ng-template>
+      <tag-input-dropdown [showDropdownIfEmpty]="true"
+                          [displayBy]="'sku'"
+                          [identifyBy]="'title'"
+                          [matchingFn]="matching"
+                          [autocompleteItems]="availableProducts">
+        <ng-template let-item="item" let-index="index">
+          {{ item.sku }}: {{ item.title }}
+        </ng-template>
+      </tag-input-dropdown>
+    </tag-input>
+  </div>
+
+  <button type="submit" class="btn btn-success" [disabled]="eventForm.invalid || eventForm.pristine">Submit</button>
+  <button type="button" class="btn btn-success" (click)="clearForm()" *ngIf="isCreateMod">Clear</button>
+</form>

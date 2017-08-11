@@ -1,0 +1,80 @@
+<div class="row">
+  <h2 class="col-md-3"> Products </h2>
+
+  <div class="col-md-6  form-group">
+    <div class="row">
+      <label class="col-xs-12 control-label"> Filter: </label>
+    </div>
+    <div class="col-xs-12">
+      <div class="row">
+        <input  class="form-control input-sm" [(ngModel)]="filterQuery"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 form-group">
+    <div class="row">
+      <label class="col-xs-12 control-label"> Rows on page </label>
+    </div>
+    <div class="col-xs-12" style="padding-left: 0;">
+      <select class="form-control input-sm" [(ngModel)]="rowsOnPage">
+        <option [ngValue]="2">2</option>
+        <option [ngValue]="5">5</option>
+        <option [ngValue]="10">10</option>
+      </select>
+    </div>
+  </div>
+
+</div>
+
+<div class="panel panel-default" >
+
+  <div class="panel-heading"> All Products </div>
+
+  <table class="table table-hover" [mfData]="data | productsTableFilter : filterQuery" #mf="mfDataTable"
+         [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder" >
+
+    <thead>
+    <tr>
+      <th> <mfDefaultSorter by="title">Title</mfDefaultSorter> </th>
+      <th style="width:15%;"> Short Description </th>
+      <th style="width:10%;"> Sku </th>
+      <th style="width:5%;"> Price </th>
+      <th style="width:20%;"> Images </th>
+      <th style="width:10%;"> <mfDefaultSorter by="createdAt">Created At </mfDefaultSorter> </th>
+      <th style="width:10%;"> <mfDefaultSorter by="updatedAt">Updated At </mfDefaultSorter> </th>
+      <th style="width:7%;"> Archived </th>
+      <th style="width:80px;"> Some Controls </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let item of mf.data">
+      <td>{{item.title}}</td>
+      <td>{{item.shortDescription}}</td>
+      <td>{{item.sku}}</td>
+      <td>{{item.price}}</td>
+      <td>{{item.images}}</td>
+      <td>{{item.createdAt}}</td>
+      <td>{{item.updatedAt}}</td>
+      <td class="center">
+        <input type="checkbox" value="" disabled [checked]="item.archived">
+      </td>
+      <td class="center">
+        <button type="button" class="btn btn-info btn-xs" (click)="modify(item)">modify</button>
+      </td>
+    </tr>
+    <tr *ngIf="!data">
+      No products found
+    </tr>
+    </tbody>
+
+    <tfoot *ngIf="data">
+    <tr>
+      <td colspan="2" style="vertical-align: center;"> Showing  {{rowsOnPage < data.length ? rowsOnPage : data.length}} of {{data.length}}</td>
+      <td colspan="7" style="text-align: right;"> <mfBootstrapPaginator [rowsOnPageSet]="[15,25,50]"></mfBootstrapPaginator></td>
+    </tr>
+    </tfoot>
+  </table>
+
+</div>
